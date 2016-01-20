@@ -2,10 +2,17 @@ package pSNMP1;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class Agentsimple {
+public class Agentsimple extends UnicastRemoteObject implements InterRMI {
 	
-	public Agentsimple() {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public Agentsimple() throws RemoteException {
 		super();
 		this.adresse = getAdresse();
 		String hostName = null;
