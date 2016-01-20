@@ -19,7 +19,7 @@ public static void main (String args[]) {
 		}
 		
 		try {
-			Naming.bind("server_rmi", (Remote) new Agentsimple());
+			Naming.bind("Manager", (Remote) new Agentsimple());
 		} catch (MalformedURLException | RemoteException
 				| AlreadyBoundException e) {
 			// TODO Auto-generated catch block
