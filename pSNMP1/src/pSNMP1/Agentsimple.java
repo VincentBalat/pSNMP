@@ -1,7 +1,6 @@
 package pSNMP1;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -13,70 +12,63 @@ public class Agentsimple extends UnicastRemoteObject implements InterRMI {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private InetAddress ia;
+	private int port = 3232;
+	private boolean connectid[] = new boolean[20];
+	private boolean freeid[] = new boolean[20];
+	private int nbco = 0;
 
 	public Agentsimple() throws RemoteException {
 		try{
 			// get the address of this host.
-			address= (InetAddress.getLocalHost()).toString();
+			ia = InetAddress.getLocalHost();
 		} catch(Exception e){
 			throw new RemoteException("can't get inet address.");
 		}
 
-		port=3232;  // this port(registry�fs port)
-
-		System.out.println("this address="+address+",port="+port);
-
-		try{
-			// create the registry and bind the name and object.
-			registry = LocateRegistry.createRegistry( port );
-			registry.rebind("rmiServer", this);
-		} catch(RemoteException e){
-			throw e;
-
+		System.out.println("name="+ia.getHostName()+", address="+ia.getHostAddress()+", port="+port);
+		
+		//Initialisation des connexions
+		for(int i=0;i<20;i++){
+			connectid[i]=false;
+			freeid[i]=true;
 		}
 	    
 	}
-
-	private String name;
-	private String address;
-	private int port;
-	private Registry registry;
-
-	public String getNom() {
-		try {
-			name = new String(InetAddress.getLocalHost().getHostName());
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return name;
+	
+	public Integer connect(){
+		int i = -1;
+		do {
+			i++;
+			if(i==19){
+				return -1;
+			}
+		} while(freeid[i]==false);
+		freeid[i]=true;
+		connectid[i]=false;
+		nbco++;
+		return i;
 	}
-
-	public void setNom(String nom) {
-		this.name = nom;
+	
+	public void disconnect(int id){
+		freeid[id]=true;
+		connectid[id]=false;
+	}
+	
+	public String getNom() {
+		return ia.getHostName();
 	}
 
 	public String getAdresse() {
-		try {
-			address = (InetAddress.getLocalHost()).toString();
-		}
-		catch(UnknownHostException e) {
-			e.printStackTrace();
-		}
-		return address;
+		return ia.getHostAddress();
 	}
 
-	public void setAdresse(String address) {		//Modifier l'adresse 
-		this.address = address;
+	public int getPort() {
+		return port;
 	}
-	
-	public static void main(String[] args) throws RemoteException { 
-		try{
-        	Agentsimple a=new Agentsimple();
-        } catch (Exception e) {
-        	e.printStackTrace();
-        	System.exit(1);
-        }
+
+	public int getNbco() {
+		return nbco;
 	}
 
 }

@@ -17,10 +17,11 @@ public class Manager {
 		BufferedReader fluxEntreeStandard = null;
 		String req = null;
 		Registry registry;
+		Integer id = 0;
 	    
 	    fluxEntreeStandard = new BufferedReader(new InputStreamReader(System.in));
 		
-		System.out.println("Address:port : ");
+		System.out.println("Address:port = ");
 		try {
 			req = (String)fluxEntreeStandard.readLine();
 		} catch (IOException e) {
@@ -35,9 +36,14 @@ public class Manager {
 	           // get the �gregistry�h
 	           registry=LocateRegistry.getRegistry(a[0],(new Integer(a[1])).intValue());
 	           // look up the remote object
-	           iRMI=(InterRMI)(registry.lookup("rmiServer"));
+	           iRMI=(InterRMI)(registry.lookup("Manager"));
+	           id = iRMI.connect();
+	           if(id<0 || id>=20){
+	        	   System.out.println("Full");
+	           }
+	           System.out.println("Identifiant de connexion : "+id);
 	           
-	           do {
+	           while (id<20 && id>=0) {
 					System.out.println("Tapez votre requete : ");
 					
 					try {
@@ -46,32 +52,25 @@ public class Manager {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					String s [] = req.split(" ");
-				  	  
+									  	  
 				  	if (req.startsWith("GETNOM")){
 				  		
 						System.out.println("> "+iRMI.getNom());
 						
-				  	} else if (req.startsWith("SETNOM")) {
-				  		
-				  		iRMI.setNom(s[1]);
-				  		System.out.println("> Nouveau nom : "+iRMI.getNom());
-		
 				  	} else if (req.startsWith("GETADDR")){
 				  		
 				  		iRMI.getAdresse();
 						System.out.println("> "+iRMI.getAdresse().toString());
 				  		
-				  	} else if (req.startsWith("SETADDR")){
-				  		
-				  		System.out.println("> Nouvelle adresse : "+iRMI.getAdresse().toString());
-						
+				  	} else if (req.startsWith("FIN")){
+				  		System.out.println("connexion terminée");
+				  		iRMI.disconnect(id);
+				  		id=-1;
 				  	} else {
 				  		System.out.println("Commande introuvable");
 				  	}
-				} while (req.startsWith("FIN"));
-	           
+				  	
+				}
 	       }
 	       catch(RemoteException e){
 	           e.printStackTrace();

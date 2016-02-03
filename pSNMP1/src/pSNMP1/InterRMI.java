@@ -4,12 +4,12 @@ import java.rmi.RemoteException;
 
 public interface InterRMI extends java.rmi.Remote {
 	
+	Integer connect() throws RemoteException;
+	
+	void disconnect(int id) throws RemoteException;
+	
 	String getNom() throws RemoteException;
 
-	void setNom(String nom) throws RemoteException;
-
 	String getAdresse() throws RemoteException;
-
-	void setAdresse(String adresse) throws RemoteException;
 
 }
