@@ -1,4 +1,4 @@
-package pSNMP1;
+package SNMP;
 
 import java.io.BufferedReader;
 import java.io.IOException;

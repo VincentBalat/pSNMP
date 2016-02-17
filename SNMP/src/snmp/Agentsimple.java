@@ -1,4 +1,4 @@
-package pSNMP1;
+package SNMP;
 
 import java.net.InetAddress;
 import java.rmi.RemoteException;

@@ -1,4 +1,4 @@
-package pSNMP1;
+package SNMP;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,7 +36,7 @@ public class InstaMib {
 		
 		File dir = new File (IM.getRacine()+"/MIB");
 		if(dir.exists()){
-			System.out.println("Il existe déjà une MIB dans ce répertoire voulez vous l'écraser ? (o ou n)");
+			System.out.println("Il existe dï¿½jï¿½ une MIB dans ce rï¿½pertoire voulez vous l'ï¿½craser ? (o ou n)");
 			try {
 				req = (String)fluxEntreeStandard.readLine();
 			} catch (IOException e) {
@@ -46,9 +46,9 @@ public class InstaMib {
 			if(req.equals("o")){
 				dir.mkdirs();
 				
-				System.out.println("Opération effectuée");
+				System.out.println("Opï¿½ration effectuï¿½e");
 			} else {
-				System.out.println("Opération annulée");
+				System.out.println("Opï¿½ration annulï¿½e");
 			}
 		}
 		
