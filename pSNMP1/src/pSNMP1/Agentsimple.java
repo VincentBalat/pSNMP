@@ -13,10 +13,7 @@ public class Agentsimple extends UnicastRemoteObject implements InterRMI {
 	 */
 	private static final long serialVersionUID = 1L;
 	private InetAddress ia;
-	private int port = 3232;
-	private boolean connectid[] = new boolean[20];
-	private boolean freeid[] = new boolean[20];
-	private int nbco = 0;
+	private int port = 3233;
 
 	public Agentsimple() throws RemoteException {
 		try{
@@ -27,32 +24,7 @@ public class Agentsimple extends UnicastRemoteObject implements InterRMI {
 		}
 
 		System.out.println("name="+ia.getHostName()+", address="+ia.getHostAddress()+", port="+port);
-		
-		//Initialisation des connexions
-		for(int i=0;i<20;i++){
-			connectid[i]=false;
-			freeid[i]=true;
-		}
 	    
-	}
-	
-	public Integer connect(){
-		int i = -1;
-		do {
-			i++;
-			if(i==19){
-				return -1;
-			}
-		} while(freeid[i]==false);
-		freeid[i]=true;
-		connectid[i]=false;
-		nbco++;
-		return i;
-	}
-	
-	public void disconnect(int id){
-		freeid[id]=true;
-		connectid[id]=false;
 	}
 	
 	public String getNom() {
@@ -66,9 +38,18 @@ public class Agentsimple extends UnicastRemoteObject implements InterRMI {
 	public int getPort() {
 		return port;
 	}
-
-	public int getNbco() {
-		return nbco;
+	
+	public static void main(String[] args) throws RemoteException {
+		Agentsimple a = new Agentsimple();
+		try {
+			// create the registry and bind the name and object.
+			Registry registry = LocateRegistry.createRegistry(a.getPort());
+			registry.rebind("Manager", a);
+		
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

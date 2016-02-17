@@ -4,9 +4,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class Agent extends Thread {
+public class Agent {
 	
-	public void travail() {
+	public void main() {
 		Agentsimple a = null;
 		try {
 			a = new Agentsimple();
@@ -19,9 +19,5 @@ public class Agent extends Thread {
 			e.printStackTrace();
 		}
      }
-	
-	public void run() {
-		travail();
-	}
 
 }

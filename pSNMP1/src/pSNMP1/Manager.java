@@ -17,7 +17,7 @@ public class Manager {
 		BufferedReader fluxEntreeStandard = null;
 		String req = null;
 		Registry registry;
-		Integer id = 0;
+		boolean fin = false;
 	    
 	    fluxEntreeStandard = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -32,52 +32,41 @@ public class Manager {
 		
 		System.out.println("Address = "+a[0]+" port = "+a[1]);
 		
-		try{
-	           // get the �gregistry�h
-	           registry=LocateRegistry.getRegistry(a[0],(new Integer(a[1])).intValue());
-	           // look up the remote object
-	           iRMI=(InterRMI)(registry.lookup("Manager"));
-	           id = iRMI.connect();
-	           if(id<0 || id>=20){
-	        	   System.out.println("Full");
-	           }
-	           System.out.println("Identifiant de connexion : "+id);
-	           
-	           while (id<20 && id>=0) {
-					System.out.println("Tapez votre requete : ");
-					
-					try {
-						req = fluxEntreeStandard.readLine();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+	    // get the regis	try
+	    registry=LocateRegistry.getRegistry(a[0],(new Integer(a[1])).intValue());
+	    // look up the remote object
+	    try {
+	    	iRMI=(InterRMI)(registry.lookup("Manager"));
+		} catch (NotBoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+	    do{
+			System.out.println("Tapez votre requete : ");
+
+			try {
+				req = fluxEntreeStandard.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 									  	  
-				  	if (req.startsWith("GETNOM")){
+			if (req.startsWith("GETNOM")){
+			  		
+				System.out.println("> "+iRMI.getNom());
+					
+			} else if (req.startsWith("GETADDR")){
 				  		
-						System.out.println("> "+iRMI.getNom());
-						
-				  	} else if (req.startsWith("GETADDR")){
-				  		
-				  		iRMI.getAdresse();
-						System.out.println("> "+iRMI.getAdresse().toString());
-				  		
-				  	} else if (req.startsWith("FIN")){
-				  		System.out.println("connexion terminée");
-				  		iRMI.disconnect(id);
-				  		id=-1;
-				  	} else {
-				  		System.out.println("Commande introuvable");
-				  	}
-				  	
-				}
-	       }
-	       catch(RemoteException e){
-	           e.printStackTrace();
-	       }
-	       catch(NotBoundException e){
-	           e.printStackTrace();
-	     }
-		 
+			iRMI.getAdresse();
+			System.out.println("> "+iRMI.getAdresse().toString());
+			  		
+			} else if (req.startsWith("FIN")){
+				System.out.println("connexion terminée");
+				fin = true;
+			} else {
+				System.out.println("Commande introuvable");
+			}
+	    } while (!fin);
 	}
 }
